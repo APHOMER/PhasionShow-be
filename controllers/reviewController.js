@@ -43,15 +43,11 @@ exports.getReviewById = catchAsync( async (req, res, next) => {
     if(!review) {
         return next(new AppError("No REVIEW Found with that ID"))
     }
-
     console.log(review);
-
     res.status(200).json({
         status: "success",
         data: {
             review
         }
     });
-
-
 })
