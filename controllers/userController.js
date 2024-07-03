@@ -24,8 +24,25 @@ exports.createUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => { 
     try { 
+        //  BUILDING QUERY
+        console.log(req.query);
 
-        const users = await User.find();    
+        const queryObj = { ...req.query };
+        const excludeFields = ["page", "sort", "limit", "fields"];
+        excludeFields.forEach(el => delete queryObj[el]);
+
+        // 2) ADVANCED FILTERING
+        let queryStr = JSON.stringify(queryObj);
+        queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$$(match)`);
+        console.log(JSON.parse(queryStr));
+
+        // EXECUTE QUERY
+        const query = User.find(JSON.parse(queryStr));
+
+        // const users = await User.find(queryObj);    ; 
+        const users = await query;
+
+        // SEND RESPONSE
         res.status(200).json({
             status: "success",
             results: users.length,
@@ -33,6 +50,16 @@ exports.getAllUsers = async (req, res) => {
                 users
             }
         });
+    
+    // let query = User.find(JSON.parse(queryStr));
+        
+    // FIELD LIMITING
+    // if(req.query.fields){
+    //     const fields = req.query.fields(",").join(" ");
+    //     query = query.select(fields);
+    // } else {
+    //     query = query.select(-__v);
+    // }
         
     } catch (err) {
         res.status(400).json({
@@ -102,3 +129,5 @@ exports.deleteUser = async (req, res) => {
         });
     }
 }
+
+
