@@ -4,8 +4,6 @@ const app = express();
 const bodyParser = require('body-parser');
 
 
-
-
 // const app = require("./app");
 
 const mongoose = require('mongoose');
