@@ -28,8 +28,6 @@ const userRouter = require("./router/userRouter");
 app.use("/user", userRouter);
 
 
-
-
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
