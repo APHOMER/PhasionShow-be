@@ -80,8 +80,7 @@ exports.getAllUsers = async (req, res) => {
                 users
             }
         });
-    
-        
+            
     } catch (err) {
         res.status(400).json({
             status: "fail",
