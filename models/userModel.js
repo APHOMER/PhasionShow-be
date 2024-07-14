@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
   age: {
     type: Date
   },
+  rating: {
+    type: Number,
+    required: [true, "Add ratings"]
+  },
   userPicture: [String],
 
   creatAt: {
