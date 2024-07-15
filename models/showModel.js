@@ -122,10 +122,6 @@ showSchema.pre(/^find/, function(next) {
 
   next();
 })
-// .populate({
-//   path: 'showOwner',
-//   select: '-__v -creatAt'
-// });
 
 const Show = mongoose.model("Show", showSchema);
 
