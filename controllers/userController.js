@@ -80,6 +80,8 @@ exports.getAllUsers = async (req, res) => {
                 users
             }
         });
+        
+        console.log(users);
             
     } catch (err) {
         res.status(400).json({
@@ -150,4 +152,29 @@ exports.deleteUser = async (req, res) => {
     }
 }
 
+exports.getUserStats = async (req, res) => {
+    try {
+        const stats = await User.aggregate([
+            {
+                $match: { age: { $gte: 18 } }
+            },
+            {
+                $group: {
+                    _id: null,
+                    numUser: { $sum: 1 },
+                    avgRating: { $avg: '$rating'},
+                    ageSum: { $sum: '$age'},
+                    avgAge: { $avg: '$age'},
+                    minAge: { $min: '$age'},
+                    maxAge: { max: '$age' }
+                }
+            } 
+        ]);
+    } catch (err) {
+        res.status(404).json({
+            status: "fail",
+            message: err
+        });
+    }
+}
 
