@@ -18,5 +18,4 @@ router
     .delete(userController.deleteUser);
 
 
-
-    module.exports = router;
+module.exports = router;
