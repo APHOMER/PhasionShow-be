@@ -150,14 +150,14 @@ module.exports = Show;
 
 
 
-const userSchema = new Schema({
-    name: { type: String, required: true },
-    age: { type: Number, min: 0 },
-    email: { type: String, unique: true, required: true },
-    password: { type: String, required: true },
-    isActive: { type: Boolean, default: true },
-    createdAt: { type: Date, default: Date.now },
-    profilePicture: { type: Buffer },
-    friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    meta: { type: Map, of: String }
-  });
+// const userSchema = new Schema({
+//     name: { type: String, required: true },
+//     age: { type: Number, min: 0 },
+//     email: { type: String, unique: true, required: true },
+//     password: { type: String, required: true },
+//     isActive: { type: Boolean, default: true },
+//     createdAt: { type: Date, default: Date.now },
+//     profilePicture: { type: Buffer },
+//     friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+//     meta: { type: Map, of: String }
+//   });
