@@ -40,8 +40,6 @@ const User = mongoose.model("User", userSchema);
 
 
 
-
-
 // const newUser = new User({
 //   name: "MErcy",
 //   email: "Aphomer@gmail.com",
