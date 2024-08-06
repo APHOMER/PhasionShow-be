@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const slugify = require('slugify');
+// const slugify = require('slugify');
 // const validator = require('validator'); // Custom validator
 
 const showSchema = new mongoose.Schema({
