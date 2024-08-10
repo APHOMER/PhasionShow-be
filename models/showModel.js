@@ -101,7 +101,6 @@ const showSchema = new mongoose.Schema({
 );
 
 // DOCUMENT MIDDLEWARE runs before .save() and .create()
-
 // showSchema.pre("save", function(next) {
 //   this.slug = slugify(this.name, { lower: true });
 //   next();
