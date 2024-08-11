@@ -1,12 +1,27 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
+// const validator = require('validator'); // Custom validator
 
-
-const userSchema = new mongoose.Schema({
+const showSchema = new mongoose.Schema({
   showName: {
       type: String,
       required: [true, "You can not do without name"],
-      unique: false,
-      trim: true
+      unique: true,
+      trim: true,
+      maxlength: [40, "A show name must not have more than 40 characters"],
+      minlength: [5, "A show name should have more that 4 characters"],
+      // validate: [validator.isAlpha, "Show name must only involve characters"]   // Custom validator
+  },
+
+  slug: String,
+
+  ticketType: {
+    type: String,
+    required: [true, "Specify the type of ticked you are willing to purchase"],
+    enum: {
+      values: ['Early Bird', 'Regular', 'VIP', 'VVIP'],
+      message: "You can only pick between 'Early Bird', 'Regular', 'VIP', and 'VVIP' "
+    }
   },
 
   showLocation: {
@@ -18,7 +33,24 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  priceDiscount: Number,
+  price: {
+    type: Number,
+    required: [true, "There must be a price"]
+  },
+
+  priceDiscount:{
+    type: Number,
+    // CUSTOM VALIDATOR       // Custom validator
+    type: Number,
+    validate: {
+      validator: function(val) {
+        // This only points to current doc on NEW document creation.
+        return val < this.price;
+      },
+      message: "Discount price ({VALUE}) should be lower than regular price"
+    }
+  },
+   
   description: {
     type: String,
     trim: true
@@ -36,7 +68,14 @@ const userSchema = new mongoose.Schema({
 
 })
 
-const User = mongoose.model("User", userSchema);
+// DOCUMENT MIDDLEWARE runs before .save() and .create()
+showSchema.pre("save", function(next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
+
+
+const Show = mongoose.model("Show", showSchema);
 
 // const newUser = new User({
 //   name: "MErcy",
