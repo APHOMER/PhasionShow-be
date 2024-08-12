@@ -21,18 +21,23 @@ const userSchema = new mongoose.Schema({
     required: [true, "Add ratings"]
   },
   userPicture: [String],
-
   creatAt: {
     type: Date,
     default: Date.now(),
     // select: false; // to hide the -createdAt
   },
 
-
+  // slug: String,
   
   // email: { type: String, unique: true, required: true },
 
 })
+
+// DOCUMENT MIDDLEWARE runs before .save() and .create()
+// userSchema.pre("save", function(next) {
+//   this.slug = slugify(this.name, { lower: true });
+//   next();
+// });
 
 const User = mongoose.model("User", userSchema);
 
