@@ -7,7 +7,9 @@ exports.createUser = async (req, res) => {
     try {
         
         const newUser = await User.create(req.body);
-    
+
+        console.log(newUser);
+
         res.status(201).json({
             status: "success",
             data: {
@@ -16,6 +18,8 @@ exports.createUser = async (req, res) => {
         });
         
     } catch (error) {
+        console.log(error);
+
         res.status(400).json({
             status: "fail",
             message: error
@@ -23,13 +27,49 @@ exports.createUser = async (req, res) => {
     }
 };
 
+exports.getAllUsers = async (req, res) => {
+    try {
+        
+        const users = await User.find();
+        
+        // const queryObj = { ...req.query };
+        // let queryStr = JSON.stringify(queryObj);
+        // const query = User.find(JSON.parse(queryStr));
 
-exports.getAllUsers = async (req, res) => { 
+
+    //     // FIELD LIMITING
+    // if(req.query.fields){
+    //     const fields = req.query.fields(",").join(" ");
+    //     query = query.select(fields);
+    // } else {
+    //     query = query.select(-__v);
+    // }
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                users
+            }
+
+        })
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(400).json({
+            status: "fail",
+            message: error
+        });
+    }
+}
+
+exports.getAllUsers1 = async (req, res) => { 
     try { 
         //  BUILDING QUERY
         console.log(req.query);
 
         const queryObj = { ...req.query };
+
         const excludeFields = ["page", "sort", "limit", "fields"];
         excludeFields.forEach(el => delete queryObj[el]);
 
@@ -86,6 +126,8 @@ exports.getAllUsers = async (req, res) => {
         console.log(users);
             
     } catch (err) {
+        console.log(err);
+
         res.status(400).json({
             status: "fail",
             message: err
