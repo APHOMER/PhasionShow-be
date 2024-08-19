@@ -13,7 +13,7 @@ const showSchema = new mongoose.Schema({
       // validate: [validator.isAlpha, "Show name must only involve characters"]   // Custom validator
   },
 
-  slug: String,
+  // slug: String,
 
   ticketType: {
     type: String,
@@ -27,7 +27,7 @@ const showSchema = new mongoose.Schema({
   showLocation: {
       type: String,
       required: [true, 'Email is required'],
-      unique: [true, 'A user with this email already exist'], //Validator
+      // unique: [true, 'A user with this email already exist'], //Validator
   },
   address: {
     type: String,
@@ -35,13 +35,13 @@ const showSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
-    required: [true, "There must be a price"]
+    // required: [true, "There must be a price"]
   },
 
   priceDiscount:{
     type: Number,
     // CUSTOM VALIDATOR       // Custom validator
-    type: Number,
+    // type: Number,
     validate: {
       validator: function(val) {
         // This only points to current doc on NEW document creation.
@@ -69,13 +69,18 @@ const showSchema = new mongoose.Schema({
 })
 
 // DOCUMENT MIDDLEWARE runs before .save() and .create()
-showSchema.pre("save", function(next) {
-  this.slug = slugify(this.name, { lower: true });
-  next();
-});
+
+// showSchema.pre("save", function(next) {
+//   this.slug = slugify(this.name, { lower: true });
+//   next();
+// });
 
 
 const Show = mongoose.model("Show", showSchema);
+
+
+module.exports = Show;
+
 
 // const newUser = new User({
 //   name: "MErcy",
@@ -104,5 +109,3 @@ const Show = mongoose.model("Show", showSchema);
 //     friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 //     meta: { type: Map, of: String }
 //   });
-
-module.exports = Show;
