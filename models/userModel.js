@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-
+const validator = require('validator'); // Custom validator
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -12,38 +13,88 @@ const userSchema = new mongoose.Schema({
       type: String,
       required: [true, 'Email is required'],
       unique: [true, 'A user with this email already exist'], //Validator
-  },
-  age: {
-    type: Date
-  },
-  rating: {
-    type: Number,
-    required: [true, "Add ratings"]
+      validate: [validator.isEmail, "Please provide an email address..."]
   },
   userPicture: [String],
+  role: {
+    type: String,
+    enum: ['user', 'ticketer', 'event-planner', 'admin', 'ceo'],
+    default: "user"
+  },
+  password: {
+    type: String,
+    required: [true, "Please provide a password"],
+    minlength: 8,
+    select: false
+  },
+  confirmPassword: {
+    type: String,
+    required: [true, "Please confirm your password"],
+    validate: {
+      // THIS ONLY WORKS ON CREATE AND SAVE !!!
+      validator: function(el) {
+        return el === this.password;
+      },
+      message: "This password is not the same with the other password !"
+    }
+  },
+  passwordChangedAt: {
+    type: Date,
+    // default: Date.now() - 1000000000000,
+  }, 
   creatAt: {
     type: Date,
     default: Date.now(),
     // select: false; // to hide the -createdAt
   },
-
-  // slug: String,
-  
-  // email: { type: String, unique: true, required: true },
-
 })
 
 // DOCUMENT MIDDLEWARE runs before .save() and .create()
-// userSchema.pre("save", function(next) {
-//   this.slug = slugify(this.name, { lower: true });
-//   next();
-// });
+userSchema.pre("save", async function(next) {
+  // Only run this function only if passowrd was actually modified
+  if(!this.isModified("password")) return next();
+
+  // Hash this password with cost of 12
+  this.password = await bcrypt.hash(this.password, 12);
+
+  // Delete confirmPassword field
+  this.confirmPassword = undefined;
+  next()
+});
+
+
+
+// INSTANCE METHOD => Instance method is available on all the user's document
+userSchema.methods.correctPassword = async function(inputPassword, userPassword) {
+  // inputPassword is from "req.body", userPassword is from Model
+  return await bcrypt.compare(inputPassword, userPassword);
+}
+
+
+// Check if User changed password
+userSchema.methods.changedPasswordAfter = async function(JWTTimestamp){
+  if(this.passwordChangedAt) {
+    const changedTimeStamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10); 
+
+    console.log(JWTTimestamp , changedTimeStamp)
+    console.log(JWTTimestamp < changedTimeStamp)
+
+    return JWTTimestamp < changedTimeStamp;
+
+  }
+
+  // False means NOT changed
+  return false;
+}
+
+
 
 const User = mongoose.model("User", userSchema);
 
 
 
 
+module.exports = User;
 
 // const newUser = new User({
 //   name: "MErcy",
@@ -72,5 +123,3 @@ const User = mongoose.model("User", userSchema);
 //     friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 //     meta: { type: Map, of: String }
 //   });
-
-module.exports = User;
