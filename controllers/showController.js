@@ -1,0 +1,163 @@
+
+const Show = require("../models/showModel.js");
+
+const catchAsync = require("../utils/catchAsync");
+const AppError = require("../utils/appError");
+
+exports.createShow = catchAsync(async (req, res, next) => {
+    const newShow = await Show.create(req.body);
+
+        console.log(newShow);
+
+        res.status(201).json({
+            status: "success",
+            data: {
+                Show: newShow
+            }
+        });
+
+    // try {
+        
+        
+    // } catch (error) {
+    //     console.log(error);
+
+    //     res.status(400).json({
+    //         status: "fail",
+    //         message: error
+    //     })
+    // }
+});
+
+
+exports.getAllShow = catchAsync(async (req, res, next) => {
+        
+        const show = await Show.find();
+        
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                show
+            }
+
+        })
+
+    // try {
+    
+    // } catch (error) {
+
+    //     console.log(error);
+
+    //     res.status(400).json({
+    //         status: "fail",
+    //         message: error
+    //     });
+    // }
+});
+
+
+exports.getShow = catchAsync(async(req, res, next) => {
+    // try {
+
+        const show = await Show.findById(req.params.id);
+
+        if(!show) {
+            return next(new AppError("No show found in that ID", 404));
+        }
+
+        console.log("current Show",show);
+        res.status(200).json({
+            status: "success",
+            data: {
+                show
+            }
+        });
+
+    // } catch (err) {
+    //     res.status(404).json({
+    //         status: "fail",
+    //         message: err
+    //     })
+    // }
+})
+
+exports.updateShow = catchAsync(async (req, res, next) => {
+    // try {
+        console.log(req.body);
+        const updatedShow = await Show.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        });
+
+        
+        if(!updatedShow) {
+            return next(new AppError("No show found in that ID", 404));
+        }
+        
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                updatedShow
+            }
+        });
+    // } catch (err) {
+    //     res.status(404).json({
+    //         status: "fail",
+    //         message: err
+    //     })
+    // }
+})
+
+exports.deleteShow = catchAsync(async (req, res, next) => {
+    // try {
+        const deletedShow = await User.findByIdAndDelete(req.params.id);
+        // await Show.findByIdAndDelete(req.params.id);
+        // console.log(deletedShow);
+        
+        if(!deletedShow) {
+            return next(new AppError("No show found in that ID", 404));
+        }
+        
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                deletedShow
+            }
+        })
+    // } catch (err) {
+    //     res.status(404).json({
+    //         status: "fail",
+    //         message: err
+    //     });
+    // }
+});
+
+exports.getShowStats = catchAsync(async (req, res, next) => {
+    // try {
+        const stats = await Show.aggregate([
+            {
+                $match: { age: { $gte: 18 } }
+            },
+            {
+                $group: {
+                    _id: null,
+                    numUser: { $sum: 1 },
+                    avgRating: { $avg: '$rating'},
+                    ageSum: { $sum: '$age'},
+                    avgAge: { $avg: '$age'},
+                    minAge: { $min: '$age'},
+                    maxAge: { max: '$age' }
+                }
+            } 
+        ]);
+    // } catch (err) {
+    //     res.status(404).json({
+    //         status: "fail",
+    //         message: err
+    //     });
+    // }
+});
+
