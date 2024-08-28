@@ -1,6 +1,5 @@
-
 const User = require("../models/userModel.js");
-
+const catchAsync = require("../utils/catchAsync.js");
 
 
 exports.createUser = async (req, res) => {
@@ -27,24 +26,11 @@ exports.createUser = async (req, res) => {
     }
 };
 
-exports.getAllUsers = async (req, res) => {
+exports.getAllUsers = catchAsync(async (req, res) => {
     try {
         
         const users = await User.find();
-        
-        // const queryObj = { ...req.query };
-        // let queryStr = JSON.stringify(queryObj);
-        // const query = User.find(JSON.parse(queryStr));
-
-
-    //     // FIELD LIMITING
-    // if(req.query.fields){
-    //     const fields = req.query.fields(",").join(" ");
-    //     query = query.select(fields);
-    // } else {
-    //     query = query.select(-__v);
-    // }
-
+    
         res.status(200).json({
             status: "success",
             data: {
@@ -60,8 +46,8 @@ exports.getAllUsers = async (req, res) => {
             status: "fail",
             message: error
         });
-    }
-}
+    };
+});
 
 exports.getAllUsers1 = async (req, res) => { 
     try { 
@@ -179,7 +165,9 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
     try {
         // const deletedUser = await User.findByIdAndDelete(req.params.id);
-        await User.findByIdAndDelete(req.params.id);
+        
+        // const deletedUser =
+         await User.findByIdAndDelete(req.params.id);
         // console.log(deletedUser);
 
         res.status(200).json({
@@ -196,29 +184,29 @@ exports.deleteUser = async (req, res) => {
     }
 }
 
-exports.getUserStats = async (req, res) => {
-    try {
-        const stats = await User.aggregate([
-            {
-                $match: { age: { $gte: 18 } }
-            },
-            {
-                $group: {
-                    _id: null,
-                    numUser: { $sum: 1 },
-                    avgRating: { $avg: '$rating'},
-                    ageSum: { $sum: '$age'},
-                    avgAge: { $avg: '$age'},
-                    minAge: { $min: '$age'},
-                    maxAge: { max: '$age' }
-                }
-            } 
-        ]);
-    } catch (err) {
-        res.status(404).json({
-            status: "fail",
-            message: err
-        });
-    }
-}
+// exports.getUserStats = async (req, res) => {
+//     try {
+//         const stats = await User.aggregate([
+//             {
+//                 $match: { age: { $gte: 18 } }
+//             },
+//             {
+//                 $group: {
+//                     _id: null,
+//                     numUser: { $sum: 1 },
+//                     avgRating: { $avg: '$rating'},
+//                     ageSum: { $sum: '$age'},
+//                     avgAge: { $avg: '$age'},
+//                     minAge: { $min: '$age'},
+//                     maxAge: { max: '$age' }
+//                 }
+//             } 
+//         ]);
+//     } catch (err) {
+//         res.status(404).json({
+//             status: "fail",
+//             message: err
+//         });
+//     }
+// }
 
