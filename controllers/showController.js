@@ -1,4 +1,4 @@
-
+const User = require("../models/userModel.js"); // Thank God;
 const Show = require("../models/showModel.js");
 
 const catchAsync = require("../utils/catchAsync");
@@ -112,7 +112,7 @@ exports.updateShow = catchAsync(async (req, res, next) => {
 
 exports.deleteShow = catchAsync(async (req, res, next) => {
     // try {
-        const deletedShow = await User.findByIdAndDelete(req.params.id);
+        const deletedShow = await Show.findByIdAndDelete(req.params.id);
         // await Show.findByIdAndDelete(req.params.id);
         // console.log(deletedShow);
         
