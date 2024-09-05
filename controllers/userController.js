@@ -1,6 +1,15 @@
 const User = require("../models/userModel.js");
 const catchAsync = require("../utils/catchAsync.js");
+const AppError = require("../utils/appError");
 
+
+const filterObj = (obj, ...allowedFields) => {
+    const newObj = {};
+    Object.keys(obj).forEach(el => {
+        if(allowedFields.includes(el)) newObj[el] = obj[el];
+    });
+    return newObj;
+};
 
 exports.createUser = async (req, res) => {
     try {
@@ -120,6 +129,40 @@ exports.getAllUsers1 = async (req, res) => {
         });
     } 
 }
+
+exports.updateMe = async (req, res, next) => {
+    const { password, confirmPassword } = req.body;
+
+    // 1) Create error if user POSTs password data
+    if(password || confirmPassword) {
+        return next(new AppError("This route is not for updating password, Please go to /updateMyPassword", 400));
+    }
+
+    // 2) filtered out unwanted fields that are not allowed to be updated.
+    const filteredBody = filterObj(req.body, 'name', 'email', 'userPicture');
+
+    // 3) Update user document
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+        new: true,
+        runValidators: true
+    });
+
+    res.status(200).json({
+        status: "success",
+        data: {
+            user: updatedUser
+        }
+    });
+};
+
+exports.deleteMe = catchAsync(async (req, res, next) => {
+    let user = await User.findByIdAndUpdate(req.user.id, { active: false });
+    console.log(user);
+    res.status(204).json({
+        status: 'success',
+        data: null
+    });
+});
 
 exports.getUser = async(req, res) => {
     try {
