@@ -51,7 +51,12 @@ const userSchema = new mongoose.Schema({
     default: Date.now(),
     // select: false; // to hide the -createdAt
   },
-})
+  active: {
+    type: Boolean,
+    default: true,
+    select: false
+  }
+});
 
 // DOCUMENT MIDDLEWARE runs before .save() and .create()
 userSchema.pre("save", async function(next) {
@@ -70,6 +75,14 @@ userSchema.pre('save', function(next) {
   if (!this.isModified('password') || this.isNew) return next();
 
   this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
+// Query Middleware
+userSchema.pre(/^find/, function(next) { // this function returns only active users
+  // this points to the current query
+  this.find({ active: { $ne: false } });
+  // this.find({ active: true });
   next();
 });
 
