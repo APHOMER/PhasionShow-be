@@ -19,6 +19,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.7.0",
     "mongoose": "^5.13.22",
+    "nodemailer": "^6.9.14",
     "nodemon": "^3.1.4",
     "slugify": "^1.6.6",
     "ticket-show": "file:",
