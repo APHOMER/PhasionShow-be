@@ -44,12 +44,6 @@ app.use((req, res, next) => {
 })
 
 // ROUTES
-app.get('/', (req, res, next) => {
-    console.log('Welcome to the PHASIONSHOW home page!')
-    res.send('Welcome to the PHASIONSHOW home page!');
-    next();
-  });
-
 app.use("/user", userRouter);
 app.use("/show", showRouter);
 

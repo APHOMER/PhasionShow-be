@@ -4,11 +4,21 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 
+
+router.get('/', (req, res, next) => {
+    console.log('Welcome to the PHASIONSHOW home page!')
+    res.send('Welcome to the PHASIONSHOW home page!');
+    // next();
+  });
+
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 
 router.post("/forgotpassword", authController.forgotPassword);
 router.patch("/resetpassword/:token", authController.resetPassword);
+
+
+
 
 router.patch(
     "/updateMyPassword", 
