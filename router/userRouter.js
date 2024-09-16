@@ -5,12 +5,6 @@ const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 
 
-router.get('/', (req, res, next) => {
-    console.log('Welcome to the PHASIONSHOW home page!')
-    res.send('Welcome to the PHASIONSHOW home page!');
-    // next();
-  });
-
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 
