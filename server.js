@@ -1,5 +1,6 @@
 const express = require("express"); 
 const app = express();
+const rateLimit = require('express-rate-limit');
 
 const bodyParser = require('body-parser');
 // const app = require("./app");
@@ -26,6 +27,15 @@ mongoose.connect(DB, {
 // Parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // Parse application/json
+
+// API LIMITING
+const limiter = rateLimit({
+    max: 3, //100,
+    windowMs: 60 * 60 * 1000,
+    message: 'Too many request from IP, please try again in an hour !'
+});
+app.use('/show', limiter); // To limit request rate on shows routes
+
 app.use(bodyParser.json());
 
 
@@ -44,7 +54,7 @@ app.use((req, res, next) => {
 })
 
 // ROUTES
-app.use('/', (req, res, next) => {
+app.get('/', (req, res) => {
     console.log('Welcome to the PHASIONSHOW home page!')
     res.send(' WELCOME to the PHASIONSHOW home page!');
     // next();
