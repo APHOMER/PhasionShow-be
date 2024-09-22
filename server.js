@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // API LIMITING
 const limiter = rateLimit({
-    max: 3, //100,
+    max: 100,
     windowMs: 60 * 60 * 1000,
     message: 'Too many request from IP, please try again in an hour !'
 });
