@@ -58,7 +58,7 @@ app.get('/', (req, res) => {
     console.log('Welcome to the PHASIONSHOW home page!')
     res.send(' WELCOME to the PHASIONSHOW home page!');
   });
-  ////////////////
+  
 
 app.use("/user", userRouter);
 app.use("/show", showRouter);
