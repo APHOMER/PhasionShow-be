@@ -12,6 +12,7 @@ router
     // .get(showController.getAllShow)
     .post(showController.createShow);
 
+    
 router
     .route('/:id')
     .get(showController.getShow)
