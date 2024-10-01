@@ -1,11 +1,23 @@
 const express = require("express"); 
 const app = express();
+const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
+const cors = require('cors');
+
 
 const bodyParser = require('body-parser');
 // const app = require("./app");
 const mongoose = require('mongoose');
 const dotenv = require("dotenv");
+
+
+// Set security HTTP Headers
+app.use(helmet());
+app.use(cors());
 
 // UNHANDLED UNCAUGHT EXCEPTION
 process.on('uncaughtException', err => {
@@ -28,7 +40,12 @@ mongoose.connect(DB, {
 app.use(bodyParser.urlencoded({ extended: false }));
 // Parse application/json
 
-// API LIMITING
+// DEVELOPMENT LOGGING
+if(process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
+
+// LIMIT REQUEST FROM SAME API 
 const limiter = rateLimit({
     max: 100,
     windowMs: 60 * 60 * 1000,
@@ -36,7 +53,28 @@ const limiter = rateLimit({
 });
 app.use('/show', limiter); // To limit request rate on shows routes
 
-app.use(bodyParser.json());
+// BODY PARSER, READING DATA FROM BODY INTO req.body
+app.use(bodyParser.json({ limit: '10kb' }));
+
+// DATA SANITIZATION AGAINST NoSQL QUERY INJECTION
+app.use(mongoSanitize());
+
+// DATA SANITIZATION AGAINST XSS - html
+app.use(xss());
+
+// PREVENT PARAMETER POLUTION
+app.use(hpp({
+    whitelist: [
+        'showName',
+        'showLocation',
+        'address',
+        'price',
+        'ticketType',
+    ]
+}));
+
+// SERVING STATIC FILES
+app.use(express.static(`${__dirname}/public`));
 
 
 const AppError = require('./utils/appError');
@@ -53,7 +91,7 @@ app.use((req, res, next) => {
     next();
 })
 
-ROUTES
+// ROUTES
 app.get('/', (req, res) => {
     console.log('Welcome to the PHASIONSHOW home page!')
     res.send(' WELCOME to the PHASIONSHOW home page!');
