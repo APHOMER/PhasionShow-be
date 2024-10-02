@@ -1,12 +1,12 @@
 const express = require("express"); 
 const app = express();
-const morgan = require('morgan');
+// const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
-const hpp = require('hpp');
-const cors = require('cors');
+// const helmet = require('helmet');
+// const mongoSanitize = require('express-mongo-sanitize');
+// const xss = require('xss-clean');
+// const hpp = require('hpp');
+// const cors = require('cors');
 
 
 const bodyParser = require('body-parser');
@@ -16,8 +16,8 @@ const dotenv = require("dotenv");
 
 
 // Set security HTTP Headers
-app.use(helmet());
-app.use(cors());
+// app.use(helmet());
+// app.use(cors());
 
 // UNHANDLED UNCAUGHT EXCEPTION
 process.on('uncaughtException', err => {
@@ -54,27 +54,28 @@ const limiter = rateLimit({
 app.use('/show', limiter); // To limit request rate on shows routes
 
 // BODY PARSER, READING DATA FROM BODY INTO req.body
-app.use(bodyParser.json({ limit: '10kb' }));
+app.use(bodyParser.json());
+// app.use(bodyParser.json({ limit: '10kb' }));
 
 // DATA SANITIZATION AGAINST NoSQL QUERY INJECTION
-app.use(mongoSanitize());
+// app.use(mongoSanitize());
 
 // DATA SANITIZATION AGAINST XSS - html
-app.use(xss());
+// app.use(xss());
 
 // PREVENT PARAMETER POLUTION
-app.use(hpp({
-    whitelist: [
-        'showName',
-        'showLocation',
-        'address',
-        'price',
-        'ticketType',
-    ]
-}));
+// app.use(hpp({
+//     whitelist: [
+//         'showName',
+//         'showLocation',
+//         'address',
+//         'price',
+//         'ticketType',
+//     ]
+// }));
 
 // SERVING STATIC FILES
-app.use(express.static(`${__dirname}/public`));
+// app.use(express.static(`${__dirname}/public`));
 
 
 const AppError = require('./utils/appError');
