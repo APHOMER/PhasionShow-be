@@ -1,3 +1,4 @@
+// UTX48379553
 const express = require('express');
 const router = express.Router();
 
@@ -8,8 +9,8 @@ const authController = require("../controllers/authController");
 
 router
     .route('/')
-    .get(authController.protect, showController.getAllShow)
-    // .get(showController.getAllShow)
+    //.get(authController.protect, showController.getAllShow)
+     .get(showController.getAllShow)
     .post(showController.createShow);
 
     
