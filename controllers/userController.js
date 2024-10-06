@@ -58,77 +58,77 @@ exports.getAllUsers = catchAsync(async (req, res) => {
     };
 });
 
-exports.getAllUsers1 = async (req, res) => { 
-    try { 
-        //  BUILDING QUERY
-        console.log(req.query);
+// exports.getAllUsers1 = async (req, res) => { 
+//     try { 
+//         //  BUILDING QUERY
+//         console.log(req.query);
 
-        const queryObj = { ...req.query };
+//         const queryObj = { ...req.query };
 
-        const excludeFields = ["page", "sort", "limit", "fields"];
-        excludeFields.forEach(el => delete queryObj[el]);
+//         const excludeFields = ["page", "sort", "limit", "fields"];
+//         excludeFields.forEach(el => delete queryObj[el]);
 
-        // 2) ADVANCED FILTERING
-        let queryStr = JSON.stringify(queryObj);
-        queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$$(match)`);
-        console.log(JSON.parse(queryStr));
+//         // 2) ADVANCED FILTERING
+//         let queryStr = JSON.stringify(queryObj);
+//         queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$$(match)`);
+//         console.log(JSON.parse(queryStr));
 
-        const query = User.find(JSON.parse(queryStr));
+//         const query = User.find(JSON.parse(queryStr));
 
-        // const users = await User.find(queryObj); 
+//         // const users = await User.find(queryObj); 
         
-    // 2) SORTING
-    if(req.query.sort) {
-        const sortBy = req.query.sort.split(',').join(" ");
-        query = query.sort(sortBy);
-    }else {
-        query = query.sort("-createdAt")
-    };
+//     // 2) SORTING
+//     if(req.query.sort) {
+//         const sortBy = req.query.sort.split(',').join(" ");
+//         query = query.sort(sortBy);
+//     }else {
+//         query = query.sort("-createdAt")
+//     };
          
-    // FIELD LIMITING
-    if(req.query.fields){
-        const fields = req.query.fields(",").join(" ");
-        query = query.select(fields);
-    } else {
-        query = query.select(-__v);
-    }
+//     // FIELD LIMITING
+//     if(req.query.fields){
+//         const fields = req.query.fields(",").join(" ");
+//         query = query.select(fields);
+//     } else {
+//         query = query.select(-__v);
+//     }
 
-    // PAGINATION
-    const page = req.query.page * 1 || 1;
-    const limit = req.query.limit * 1 || 100;
-    const skip = (page - 1) * limit;
+//     // PAGINATION
+//     const page = req.query.page * 1 || 1;
+//     const limit = req.query.limit * 1 || 100;
+//     const skip = (page - 1) * limit;
 
-    query = query.skip(skip).limit(limit);
+//     query = query.skip(skip).limit(limit);
 
-    if(req.query.page) {
-        const numUsers = await User.countDocuments();
-        if(skip >= numUsers) throw new Error("This page does not exist yet");
-    };
+//     if(req.query.page) {
+//         const numUsers = await User.countDocuments();
+//         if(skip >= numUsers) throw new Error("This page does not exist yet");
+//     };
 
 
-    // EXECUTE QUERY   ; 
-    const users = await query;
+//     // EXECUTE QUERY   ; 
+//     const users = await query;
 
-        // SEND RESPONSE
-        res.status(200).json({
-            status: "success",
-            results: users.length,
-            data: {
-                users
-            }
-        });
+//         // SEND RESPONSE
+//         res.status(200).json({
+//             status: "success",
+//             results: users.length,
+//             data: {
+//                 users
+//             }
+//         });
         
-        console.log(users);
+//         console.log(users);
             
-    } catch (err) {
-        console.log(err);
+//     } catch (err) {
+//         console.log(err);
 
-        res.status(400).json({
-            status: "fail",
-            message: err
-        });
-    } 
-}
+//         res.status(400).json({
+//             status: "fail",
+//             message: err
+//         });
+//     } 
+// }
 
 exports.updateMe = async (req, res, next) => {
     const { password, confirmPassword } = req.body;
