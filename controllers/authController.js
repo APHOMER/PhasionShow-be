@@ -35,7 +35,7 @@ const createSendToken = (user, statusCode, res) => {
         status: "success",
         token,
         data: {
-            user
+            user: user.toJson() // From GNC 10/7/2027:::1:25am
         }
     });
 };
