@@ -39,6 +39,7 @@ mongoose.connect(DB, {
 // Parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // Parse application/json
+app.use(express.json()) // From GNC 10/7/2027:::1:25am
 
 // DEVELOPMENT LOGGING
 if(process.env.NODE_ENV === 'development') {
