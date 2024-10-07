@@ -34,7 +34,24 @@ mongoose.connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true //false
-}).then(() => console.log('DB connection successful...'));
+}).then(
+    // async
+    () => {
+    // let retro = await fetch("https://phasionshow-be.onrender.com/user/login", {
+    //     method: 'POST',
+    //     headers: {
+    //       'Accept': 'application/json',
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+    //         email: "aphomer@gmail.com",
+    //         password: "aphomers"
+    //     })
+    // });
+    // const content = await retro.json();
+    // console.log({HEREEEE: content})
+    console.log('DB connection successful...')
+});
 
 // Parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -97,7 +114,7 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
     console.log('Welcome to the PHASIONSHOW home page!')
     res.send(' WELCOME to the PHASIONSHOW home page!');
-  });
+});
   
 
 app.use("/user", userRouter);
