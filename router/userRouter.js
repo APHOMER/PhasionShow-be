@@ -5,12 +5,17 @@ const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 
 
+router
+    .route('/')
+    .get(userController.getAllUsers)
+    // .post(userController.createUser);
+
+
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 
 router.post("/forgotpassword", authController.forgotPassword);
-
-
+router.patch("/resetpassword/:token", authController.resetPassword); // CHANGED FROM UNDER FORGOET PASSWORD....
 
 
 router.patch(
@@ -25,18 +30,11 @@ router.delete('/deleteMe', authController.protect, userController.deleteMe);
 // router.route(userController.getUserStats);
 
 router
-    .route('/')
-    .get(userController.getAllUsers)
-    .post(userController.createUser);
-
-router
     .route('/:id')
     .get(userController.getUser)
     .patch(userController.updateUser)
     // .put(userController.updateUser)
     .delete(userController.deleteUser);
 
-
-router.patch("/resetpassword/:token", authController.resetPassword); // CHANGED FROM UNDER FORGOET PASSWORD....
 
 module.exports = router;
