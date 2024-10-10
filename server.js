@@ -49,23 +49,39 @@ mongoose.connect(DB, {
     // useCreateIndex: true,
     // useUnifiedTopology: true //false
 }).then(
-    // async
+    // async 
     () => {
-    // let retro = await fetch("https://phasionshow-be.onrender.com/user/login", {
+    // let retro = await fetch("https://phasionshow-be.onrender.com/user/signup", {
     //     method: 'POST',
     //     headers: {
     //       'Accept': 'application/json',
     //       'Content-Type': 'application/json'
     //     },
     //     body: JSON.stringify({
-    //         email: "aphomer@gmail.com",
-    //         password: "aphomers"
+    //         name: "MErcyful",
+    //         email: "Aaphomer1@gmail.com",
+    //         password: "aphomers",
+    //         confirmPassword: "aphomers"
     //     })
     // });
     // const content = await retro.json();
-    // console.log({HEREEEE: content})
-    console.log('DB connection successful...')
+    // console.log({HEREEEE: content});
+    console.log('DB connection successful...');
 });
+
+// fetch('http://localhost:3000/user/signup', {
+//     method: 'POST',
+//     credentials: 'include', // Include cookies for CORS requests if needed
+//     headers: {
+//         'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify({ username: 'user', password: 'password' })
+// })
+// .then(response => response.json())
+// .then(data => console.log(data))
+// .catch(error => console.error('Error:', error));
+
+
 
 // Parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
