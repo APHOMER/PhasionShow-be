@@ -24,7 +24,7 @@ app.use(helmet());
 
 // or configure CORS options
 const corsOptions = {
-    origin: 'https://example.com', // Replace with your frontend URL
+//     origin: 'https://example.com', // Replace with your frontend URL
     origin: process.env.NODE_ENV === 'production' ? 'https://phasionshow-be.onrender.com' : 'http://localhost:3000',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Allows cookies to be sent with requests
