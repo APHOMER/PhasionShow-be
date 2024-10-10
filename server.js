@@ -17,7 +17,21 @@ const dotenv = require("dotenv");
 
 // Set security HTTP Headers
 app.use(helmet());
-app.use(cors());
+
+
+// Use CORS with default settings
+// app.use(cors());
+
+// or configure CORS options
+const corsOptions = {
+    origin: 'https://example.com', // Replace with your frontend URL
+    origin: process.env.NODE_ENV === 'production' ? 'https://phasionshow-be.onrender.com' : 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // Allows cookies to be sent with requests
+    optionsSuccessStatus: 204 // Some legacy browsers choke on 204
+};
+
+app.use(cors(corsOptions));
 
 // UNHANDLED UNCAUGHT EXCEPTION
 process.on('uncaughtException', err => {
