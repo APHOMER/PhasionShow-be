@@ -31,9 +31,9 @@ dotenv.config({ path: "./config.env" });
 const DB = process.env.DATABASE || process.env.LOCAL_DATABASE;
 
 mongoose.connect(DB, {
-    useNewUrlParser: true,
+    // useNewUrlParser: true,
     // useCreateIndex: true,
-    useUnifiedTopology: true //false
+    // useUnifiedTopology: true //false
 }).then(
     // async
     () => {
