@@ -6,6 +6,7 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const sendEmail = require("../utils/email");
 // const bcrypt = require("")
+const mongoose = require('mongoose');
 
 const signToken = id => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
