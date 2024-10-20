@@ -5,34 +5,29 @@ const slugify = require('slugify');
 const showSchema = new mongoose.Schema({
   showName: {
       type: String,
-      required: [true, "You can not do without name"],
-      unique: true,
+      // required: [true, "You can not do without name"],
+      required: false,
+      unique: false,
       trim: true,
       maxlength: [40, "A show name must not have more than 40 characters"],
       minlength: [5, "A show name should have more that 4 characters"],
       // validate: [validator.isAlpha, "Show name must only involve characters"]   // Custom validator
   },
-
   // slug: String,
 
   ticketType: {
     type: String,
-    required: [true, "Specify the type of ticked you are willing to purchase"],
+    // required: [true, "Specify the type of ticked you are willing to purchase"],
     enum: {
       values: ['Early Bird', 'Regular', 'VIP', 'VVIP'],
       message: "You can only pick between 'Early Bird', 'Regular', 'VIP', and 'VVIP' "
     }
   },
 
-  showLocation: {
-      type: String,
-      required: [true, 'Email is required'],
-      // unique: [true, 'A user with this email already exist'], //Validator
-  },
-  address: {
-    type: String,
-    required: true,
-  },
+  // address: {
+  //   type: String,
+  //   // required: true,
+  // },
   price: {
     type: Number,
     // required: [true, "There must be a price"]
@@ -60,13 +55,50 @@ const showSchema = new mongoose.Schema({
     type: Date,
     default: Date.now()
   },
+  
+  showLocation: {
+    // GeoJSON
+      type: {
+        type: String,
+        default: "Point",
+        enum: ['Point']
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+      day: Number
+  },
+  showLocations: [
+    {
+    // GeoJSON
+      type: {
+        type: String,
+        default: "Point",
+        enum: ['Point']
+      },
+      coordinates: [Number],
+      address: String,
+      description: String
+    }
+  ],
+  showOwner : [ // The owner is the person that created the show
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+    }
+  ],
   showDate: [Date],
 
 
   
   // email: { type: String, unique: true, required: true },
 
-})
+},
+{
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+}
+);
 
 // DOCUMENT MIDDLEWARE runs before .save() and .create()
 
@@ -75,6 +107,26 @@ const showSchema = new mongoose.Schema({
 //   next();
 // });
 
+// Virtual Populate --> To let the show know that it has review
+showSchema.virtual("reviews", {
+  ref: "Review", //The name of the model I referenced.
+  foreignField: "show", // The name of the field in reviewModel.
+  localField: "_id" // the Id is stored here in this Model.
+});
+
+
+showSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'showOwner',
+    select: '-__v -creatAt'
+  });
+
+  next();
+})
+// .populate({
+//   path: 'showOwner',
+//   select: '-__v -creatAt'
+// });
 
 const Show = mongoose.model("Show", showSchema);
 
