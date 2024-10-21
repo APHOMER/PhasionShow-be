@@ -104,7 +104,7 @@ if(process.env.NODE_ENV === 'development') {
 
 
 
-// BODY PARSER, READING DATA FROM BODY INTO req.body
+// BODY PARSER, READING DATA FROM BODY INTO req.body(the 'limit : 10kb' will reject any body larger than 10kilobyte)
 // app.use(bodyParser.json());
 app.use(bodyParser.json({ limit: '10kb' }));
 
@@ -133,7 +133,7 @@ const AppError = require('./utils/appError');
 const globalErrorHandler = require("./controllers/errorController"); // Error controller
 const userRouter = require("./router/userRouter");
 const showRouter = require("./router/showRouter");
-
+const reviewRouter = require("./router/reviewRouter");
 
 // I can't explain the following lines of code
 app.use((req, res, next) => {
@@ -152,6 +152,7 @@ app.get('/', (req, res) => {
 
 app.use("/user", userRouter);
 app.use("/show", showRouter);
+app.use("/review", reviewRouter);
 
 app.all('*', (req, res, next) => {
     next(new AppError(`can't find ${req.originalUrl} on this server... !`, 404));
