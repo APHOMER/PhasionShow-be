@@ -23,7 +23,7 @@ exports.getAllShow = catchAsync(async (req, res, next) => {
         
         const show = await Show.find();
         
-
+        console.log(show);
         res.status(200).json({
             status: "success",
             data: {
@@ -49,13 +49,22 @@ exports.getAllShow = catchAsync(async (req, res, next) => {
 exports.getShow = catchAsync(async(req, res, next) => {
     // try {
 
-        const show = await Show.findById(req.params.id);
+        const show = await Show.findById(req.params.id).populate('reviews');
+        // .populate({
+        //     path: 'showOwner',
+        //     select: '-__v -creatAt'
+        // });
 
         if(!show) {
             return next(new AppError("No show found in that ID", 404));
         }
 
         console.log("current Show",show);
+        let showOwner = show.showOwner;
+        showOwner.forEach((owner) => {
+            console.log(owner.name);
+        });
+        // console.log("Show Owner",showOwner.forEach((owner) => owner.name));
         res.status(200).json({
             status: "success",
             data: {
