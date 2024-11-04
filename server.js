@@ -100,7 +100,7 @@ if(process.env.NODE_ENV === 'development') {
 //     windowMs: 60 * 60 * 1000,
 //     message: 'Too many request from IP, please try again in an hour !'
 // });
-// app.use('/show', limiter); // To limit request rate on shows routes
+app.use('/show', limiter); // To limit request rate on shows routes
 
 
 
