@@ -95,11 +95,11 @@ if(process.env.NODE_ENV === 'development') {
 }
 
 // LIMIT REQUEST FROM SAME API 
-// const limiter = rateLimit({
-//     max: 100,
-//     windowMs: 60 * 60 * 1000,
-//     message: 'Too many request from IP, please try again in an hour !'
-// });
+const limiter = rateLimit({
+    max: 100,
+    windowMs: 60 * 60 * 1000,
+    message: 'Too many request from IP, please try again in an hour !'
+});
 app.use('/show', limiter); // To limit request rate on shows routes
 
 
