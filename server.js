@@ -115,15 +115,15 @@ app.use(mongoSanitize());
 app.use(xss());
 
 // PREVENT PARAMETER POLUTION
-app.use(hpp({
-    whitelist: [
-        'showName',
-        'showLocation',
-        'address',
-        'price',
-        'ticketType',
-    ]
-}));
+// app.use(hpp({
+//     whitelist: [
+//         'showName',
+//         'showLocation',
+//         'address',
+//         'price',
+//         'ticketType',
+//     ]
+// }));
 
 // SERVING STATIC FILES
 app.use(express.static(`${__dirname}/public`));
