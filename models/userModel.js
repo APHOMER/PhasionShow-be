@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
   userPicture: [String],
   role: {
     type: String,
-    enum: ['user', 'ticketer', 'event-planner', 'admin', 'ceo'],
+    enum: ['user', 'ticketer', 'event-planner', 'admin', 'ceo', 'others'],
     default: "user"
   },
   password: {
