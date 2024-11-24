@@ -88,6 +88,7 @@ userSchema.pre(/^find/, function(next) { // this function returns only active us
 
 // INSTANCE METHOD => Instance method is available on all the user's document
 userSchema.methods.correctPassword = async function(inputPassword, userPassword) {
+
   // inputPassword is from "req.body", userPassword is from Model
   return await bcrypt.compare(inputPassword, userPassword);
 }
