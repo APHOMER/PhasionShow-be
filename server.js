@@ -72,17 +72,17 @@ mongoose.connect(DB, {
     console.log('DB connection successful...');
 });
 
-// fetch('http://localhost:3000/user/signup', {
-//     method: 'POST',
-//     credentials: 'include', // Include cookies for CORS requests if needed
-//     headers: {
-//         'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({ username: 'user', password: 'password' })
-// })
-// .then(response => response.json())
-// .then(data => console.log(data))
-// .catch(error => console.error('Error:', error));
+fetch('http://localhost:3000/user/signup', {
+    method: 'POST',
+    credentials: 'include', // Include cookies for CORS requests if needed
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username: 'user', password: 'password' })
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));
 
 
 
