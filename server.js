@@ -54,21 +54,25 @@ mongoose.connect(DB, {
 }).then(
     // async 
     () => {
-    // let retro = await fetch("https://phasionshow-be.onrender.com/user/signup", {
-    //     method: 'POST',
-    //     headers: {
-    //       'Accept': 'application/json',
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({
-    //         name: "MErcyful",
-    //         email: "Aaphomer1@gmail.com",
-    //         password: "aphomers",
-    //         confirmPassword: "aphomers"
-    //     })
-    // });
+
+
+    let retro = await fetch("https://phasionshow-be.onrender.com/user/signup", {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: "MErcyful",
+            email: "Aaphomer1@gmail.com",
+            password: "aphomers",
+            confirmPassword: "aphomers"
+        })
+    });
     // const content = await retro.json();
     // console.log({HEREEEE: content});
+
+
     console.log('DB connection successful...');
 });
 
