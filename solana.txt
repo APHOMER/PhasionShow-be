@@ -1,0 +1,122 @@
+// allows us to access everything from anchor
+use anchor_lang::prelude::*;
+// :: => seperator for name spaces
+
+declare_id!("EXh67rCZQ7iNq3pJMmPHSJQp8Dr2KRtfuPQDopjQyWVF");
+
+// we need 8bites Plus the size of whatever we are saving
+pub const ANCHOR_DISCRIMINATOR_SIZE: usize = 8;
+
+#[program]
+pub mod favorites {
+    // Rust Module with function inside
+    use super::*;
+
+    pub fn set_favorites(
+        context: Context<Setfavorites>,
+        number: u64,
+        color: String,
+        hobbies: Vec<String>,
+    ) -> Result<()> {
+        msg!("Greetings from {}", context.program_id);
+        let user_public_key = context.accounts.user.key(); //.accounts.user.key();
+
+        // msg!("User {}", user_public_key);
+        msg!("User {} favorite color is {}, favorite number is {}, and their hobbies are {:?}", user_public_key, color, number, hobbies );
+       
+
+        context.accounts.favorites.set_inner(Favorites {
+            number,
+            color,
+            hobbies,
+        }
+        );
+
+        Ok(())
+    }
+}
+
+// We are going to be saving "number", "favorite color", and "hobbies"
+#[account]
+#[derive(InitSpace)] // To easily calculate how much space it takes to store .......
+pub struct Favorites {
+    pub number: u64,
+
+    #[max_len(50)] // size of the string
+    pub color: String,
+
+    #[max_len(5, 50)] //[nexted] for the Vector(5) and the String(50) Respectively ,
+    pub hobbies: Vec<String>,
+}
+
+// THE PERSON MUST BE WRITTING INTO THEIR OWN FAVORITE ACCOUNT......
+
+// struct in rust are tittle case
+// In Anchor,the Tradition is to name the struct the same thing as the function
+#[derive(Accounts)]
+pub struct Setfavorites<'info> {
+    #[account(mut)]
+    pub user: Signer<'info>,
+
+    #[account(
+        init_if_needed, // Make a favorite account if it does not already exits......
+        payer = user, // specify who pays into the account => The user signs the transaction.
+        space = ANCHOR_DISCRIMINATOR_SIZE + Favorites::INIT_SPACE,  // tell the solana how much space the account need.
+        // This is program derived account
+        // seeds are you use to give these accounts an address on Blockchain
+        seeds = [b"favorites", user.key().as_ref()], // Will not allow DARA to write into MERCY's account.
+        bump // for calculating those seeds.
+    )]
+    // We need the person running Setfavorite to specify the favorite account they want to writting to.....
+    pub favorites: Account<'info, Favorites>,
+
+    pub system_program: Program<'info, System>, //ADMIN => this is for sumbitting to solana
+}
+
+//37:39MINUTES
+
+
+
+
+
+
+
+
+
+
+
+// use anchor_lang::prelude::*;
+
+// // This is your program's public key and it will update
+// // automatically when you build the project.
+// declare_id!("11111111111111111111111111111111");
+
+// #[program]
+// mod hello_anchor {
+//     use super::*;
+//     pub fn initialize(ctx: Context<Initialize>, data: u64) -> Result<()> {
+//         ctx.accounts.new_account.data = data;
+//         msg!("Changed data to: {}!", data); // Message will show up in the tx logs
+//         Ok(())
+//     }
+// }
+
+// #[derive(Accounts)]
+// pub struct Initialize<'info> {
+//     // We must specify the space in order to initialize an account.
+//     // First 8 bytes are default account discriminator,
+//     // next 8 bytes come from NewAccount.data being type u64.
+//     // (u64 = 64 bits unsigned integer = 8 bytes)
+//     #[account(init, payer = signer, space = 8 + 8)]
+//     pub new_account: Account<'info, NewAccount>,
+//     #[account(mut)]
+//     pub signer: Signer<'info>,
+//     pub system_program: Program<'info, System>,
+// }
+
+// #[account]
+// pub struct NewAccount {
+//     data: u64
+// }
+
+//
