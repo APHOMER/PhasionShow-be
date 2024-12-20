@@ -36,20 +36,20 @@ const reviewSchema = new mongoose.Schema({
 
 
 reviewSchema.pre(/^find/, function(next) {
-    // this.populate({
-    //   path: 'show', //show
-    //   select: 'showName' //to remove __v from showing
-    // }).populate({
-    //     path: 'reviewer',
-    //     select: 'name userPicture'
-    // });
-  
-    // next();
-
     this.populate({
-          path: 'reviewer',
-          select: 'name userPicture'
-      });
+      path: 'show', //show
+      select: 'showName' //to remove __v from showing
+    }).populate({
+        path: 'reviewer',
+        select: 'name userPicture'
+    });
+  
+    next();
+
+    // this.populate({
+    //       path: 'reviewer',
+    //       select: 'name userPicture'
+    //   });
     
       next();
   })
