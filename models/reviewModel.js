@@ -16,11 +16,11 @@ const reviewSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    show: {
-            type: mongoose.Schema.ObjectId,
-            ref: 'Show',
-            require: [true, "Review must belong to a show."]
-        },
+    // show: {
+    //         type: mongoose.Schema.ObjectId,
+    //         ref: 'Show',
+    //         require: [true, "Review must belong to a show."]
+    //     },
     reviewer:
         {
             type: mongoose.Schema.ObjectId,
