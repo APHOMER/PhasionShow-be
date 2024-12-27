@@ -1,11 +1,11 @@
 node_modules
 app.js
 package-lock.json
-test..
+# test..
 .env
 
 config.env/
-
+test/jest.text
 
 solana.txt
 /fyb.txt
