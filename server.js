@@ -162,21 +162,11 @@ app.use("/review", reviewRouter);
 
 app.all('*', (req, res, next) => {
     next(new AppError(`can't find ${req.originalUrl} on this server... !`, 404));
-
-    // res.status(404).json({
-    //     status: 'fail',
-    //     message: `can't find ${req.originalUrl} on this server... !`
-    // });
-
-    // const err = new Error(`can't find ${req.originalUrl} on this server... !`);
-    // err.status = "fail";
-    // err.statusCode = 404;
-
+    
 });
 
 // MIDDLEWARE
 app.use(globalErrorHandler);
-
 
 
 const port = process.env.PORT || 3000;
@@ -195,9 +185,6 @@ process.on('unhandledRejection', err => {
         process.exit(1);
     });
 });
-
-
-
 
 
 // module.exports = app;
